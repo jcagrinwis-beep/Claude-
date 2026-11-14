@@ -1,0 +1,11 @@
+{
+  "name": "support-desk-dojo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Oefenproject om Claude Code op 'Deep'-niveau te leren",
+  "type": "commonjs",
+  "scripts": {
+    "test": "node --test",
+    "queue": "node src/cli.js"
+  }
+}

@@ -1,0 +1,8 @@
+[
+  { "id": "T-1001", "customer": "Bakkerij De Korenaar", "subject": "Kassa geeft error bij pinnen", "body": "Sinds vanochtend krijgen we een error bij elke pinbetaling.", "createdAt": "2026-11-14T08:15:00Z" },
+  { "id": "T-1002", "customer": "Fietsenwinkel Trap", "subject": "Vraag over factuur", "body": "Kunnen jullie de factuur van oktober opnieuw sturen?", "createdAt": "2026-11-14T08:40:00Z" },
+  { "id": "T-1003", "customer": "Tandartspraktijk Wit", "subject": "COMPLETE OUTAGE", "body": "Niets werkt meer, de hele praktijk ligt stil!", "createdAt": "2026-11-14T09:05:00Z" },
+  { "id": "T-1004", "customer": "Boekhandel Pagina", "subject": "Kan niet inloggen", "body": "Mijn collega kan niet inloggen sinds de update.", "createdAt": "2026-11-14T09:10:00Z" },
+  { "id": "T-1005", "customer": "Café Het Anker", "subject": "Nieuwe medewerker toevoegen", "body": "Hoe voeg ik een extra gebruiker toe aan ons account?", "createdAt": "2026-11-14T09:30:00Z" },
+  { "id": "T-1006", "customer": "Garage Vonk", "subject": "Mogelijk security probleem", "body": "We zien logins vanaf een onbekende locatie.", "createdAt": "2026-11-14T09:45:00Z" }
+]
