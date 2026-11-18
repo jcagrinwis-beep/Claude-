@@ -25,7 +25,7 @@ Controleer of de basis zit voordat je dieper gaat.
 2. Typ `/memory` en kijk welke bestanden geladen zijn.
 3. Zet plan mode aan (Shift+Tab) en vraag: `Leg uit hoe een ticket van data/tickets.json tot een regel in de wachtrij komt.`
 
-**Klaar als:** je kunt uitleggen wat `classify`, `slaDeadline` en `sortQueue` beloven te doen.
+**Klaar als:** je kunt uitleggen wat `classifyTicket`, `slaDeadline` en `sortQueue` beloven te doen.
 
 ## Sessie 1: hooks
 
