@@ -6,6 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "test": "node --test",
-    "queue": "node src/cli.js"
+    "queue": "node src/cli.js",
+    "test:hooks": "bash test/hooks/pii-guard.test.sh"
   }
 }
