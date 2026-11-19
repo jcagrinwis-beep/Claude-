@@ -22,6 +22,10 @@ claude plugin marketplace add ./
 claude plugin install support-toolkit@support-desk-dojo
 ```
 
+### Automatisch aan in deze repository
+
+`.claude/settings.json` zet de plugin aan met `enabledPlugins`. Dat werkt zodra de marketplace `support-desk-dojo` geregistreerd is; anders slaat Claude Code de plugin over ("marketplace not registered"). Lokaal is `claude plugin marketplace add ./` dus één keer genoeg. In de cloud doet de omgeving `Claude-` dat in haar setup-script bij elke nieuwe sessie.
+
 ## Vereisten
 
 `bash` en `jq` moeten geïnstalleerd zijn; de hooks gebruiken ze om de invoer van Claude Code te lezen.
