@@ -4,5 +4,6 @@
   { "id": "T-1003", "customer": "Tandartspraktijk Wit", "subject": "COMPLETE OUTAGE", "body": "Niets werkt meer, de hele praktijk ligt stil!", "createdAt": "2026-11-14T09:05:00Z" },
   { "id": "T-1004", "customer": "Boekhandel Pagina", "subject": "Kan niet inloggen", "body": "Mijn collega kan niet inloggen sinds de update.", "createdAt": "2026-11-14T09:10:00Z" },
   { "id": "T-1005", "customer": "Café Het Anker", "subject": "Nieuwe medewerker toevoegen", "body": "Hoe voeg ik een extra gebruiker toe aan ons account?", "createdAt": "2026-11-14T09:30:00Z" },
-  { "id": "T-1006", "customer": "Garage Vonk", "subject": "Mogelijk security probleem", "body": "We zien logins vanaf een onbekende locatie.", "createdAt": "2026-11-14T09:45:00Z" }
+  { "id": "T-1006", "customer": "Garage Vonk", "subject": "Mogelijk security probleem", "body": "We zien logins vanaf een onbekende locatie.", "createdAt": "2026-11-14T09:45:00Z" },
+  { "id": "T-1007", "customer": "Bloemenzaak Lelie", "subject": "App is erg traag", "body": "Sinds gisteren duurt het openen van de bestellingen in de app soms een halve minuut.", "createdAt": "2026-11-14T10:20:00Z" }
 ]
