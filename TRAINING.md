@@ -8,10 +8,10 @@ Vijf sessies van ongeveer een uur. Elke sessie behandelt één of twee onderdele
 
 | Onderdeel | Bestand | Wat het doet |
 |---|---|---|
-| Hook (PreToolUse) | `.claude/hooks/guard.sh` | Blokkeert `rm -rf` en wijzigingen aan `.env` |
+| Hook (PreToolUse) | `plugins/support-toolkit/hooks/guard.sh` | Blokkeert `rm -rf` en wijzigingen aan `.env` |
 | Hook (PostToolUse) | `.claude/hooks/check-js.sh` | Syntaxcheck en tests na elke wijziging aan een `.js`-bestand |
-| Subagent | `.claude/agents/code-reviewer.md` | Read-only reviewer die alleen concrete bugs meldt |
-| Subagent | `.claude/agents/ticket-triager.md` | Beoordeelt tickets en schrijft een conceptantwoord |
+| Subagent | `plugins/support-toolkit/agents/code-reviewer.md` | Read-only reviewer die alleen concrete bugs meldt |
+| Subagent | `plugins/support-toolkit/agents/ticket-triager.md` | Beoordeelt tickets en schrijft een conceptantwoord |
 | Rule | `.claude/rules/broncode.md` | Laadt alleen bij werk in `src/` en `test/` |
 | Rule | `.claude/rules/klantdata.md` | Laadt alleen bij werk in `data/` |
 
