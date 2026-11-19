@@ -1,0 +1,9 @@
+{
+  "name": "support-toolkit",
+  "version": "0.1.0",
+  "description": "Vangnetten en helpers voor een supportdesk: blokkeert gevaarlijke commando's en echte e-mailadressen, en levert een code-reviewer en een ticket-triager.",
+  "author": {
+    "name": "Support Desk Dojo"
+  },
+  "keywords": ["support", "triage", "hooks", "pii"]
+}

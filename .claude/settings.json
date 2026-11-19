@@ -2,20 +2,11 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash|Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard.sh"
-          }
-        ]
-      },
-      {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pii-guard.sh"
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/time-promise-guard.sh"
           }
         ]
       }
@@ -32,5 +23,11 @@
       }
     ]
   },
-  "outputStyle": "supportcoach"
+  "statusLine": {
+    "type": "command",
+    "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/statusline.sh"
+  },
+  "enabledPlugins": {
+    "support-toolkit@support-desk-dojo": true
+  }
 }
