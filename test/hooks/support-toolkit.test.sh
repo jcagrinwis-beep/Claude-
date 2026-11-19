@@ -2,8 +2,10 @@
 # Test voor de plugin plugins/support-toolkit: werken de hooks zoals hooks.json
 # ze aanroept, vanuit een lege map buiten dit project?
 # Draai met: bash test/hooks/support-toolkit.test.sh
+# Een geïnstalleerde kopie testen: CLAUDE_PLUGIN_ROOT=<pad naar die kopie> bash test/hooks/support-toolkit.test.sh
 cd "$(dirname "$0")/../.." || exit 1
-export CLAUDE_PLUGIN_ROOT=$PWD/plugins/support-toolkit
+export CLAUDE_PLUGIN_ROOT=${CLAUDE_PLUGIN_ROOT:-$PWD/plugins/support-toolkit}
+echo "Plugin: $CLAUDE_PLUGIN_ROOT"
 unset CLAUDE_PROJECT_DIR
 hooks_json=$CLAUDE_PLUGIN_ROOT/hooks/hooks.json
 fails=0
