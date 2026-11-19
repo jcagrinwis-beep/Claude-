@@ -2,7 +2,7 @@
 
 const KEYWORDS = {
   urgent: ['outage', 'storing', 'ligt stil', 'security', 'data kwijt'],
-  high: ['error', 'fout', 'kan niet inloggen', 'betaling', 'pinnen'],
+  high: ['error', 'fout', 'kan niet inloggen', 'betaling', 'pinnen', 'traag'],
 };
 
 const SLA_HOURS = { urgent: 1, high: 4, normal: 24 };

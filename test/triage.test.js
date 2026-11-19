@@ -22,6 +22,10 @@ test('classifyTicket negeert hoofdletters', () => {
   assert.equal(classifyTicket(ticket('Error bij betalen')), 'high');
 });
 
+test('classifyTicket geeft high bij een trage app', () => {
+  assert.equal(classifyTicket(ticket('App is erg traag')), 'high');
+});
+
 test('classifyTicket geeft normal zonder trefwoorden', () => {
   assert.equal(classifyTicket(ticket('Vraag over factuur')), 'normal');
 });
