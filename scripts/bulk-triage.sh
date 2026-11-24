@@ -4,6 +4,7 @@
 #   {"id", "priority", "category", "draft"}
 # Claude krijgt alleen leesrechten. De instructies komen uit de ticket-triager-agent,
 # zodat er één bron is voor categorieën, toon en het verbod op tijdsbeloftes.
+# Na afloop controleert scripts/check-drafts.sh elk concept op tijdsbeloftes (exit 1 bij een vondst).
 #
 # Gebruik: scripts/bulk-triage.sh [ticket-id ...]   (zonder argumenten: alle tickets)
 set -euo pipefail
@@ -75,4 +76,7 @@ $ticket"
 done
 
 echo "Klaar: $(wc -l < "$OUT") van ${#IDS[@]} tickets in ${OUT#"$ROOT"/}"
+
+# Vangnet: de hook time-promise-guard.sh ziet deze antwoorden niet, dus controleren we ze hier.
+"$ROOT/scripts/check-drafts.sh" "$OUT" || failed=1
 exit "$failed"
