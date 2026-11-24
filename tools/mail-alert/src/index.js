@@ -1,23 +1,14 @@
 'use strict';
 
 const fs = require('node:fs');
-const path = require('node:path');
 const { ImapFlow } = require('imapflow');
 const { simpleParser } = require('mailparser');
 const { classify } = require('./classify');
 const { sendWhatsApp } = require('./whatsapp');
+const { getAccessToken } = require('./oauth');
+const { loadConfig, STATE_FILE, TOKEN_FILE } = require('./config');
 
-const ROOT = path.join(__dirname, '..');
-const STATE_FILE = path.join(ROOT, 'state.json');
-
-function loadEnv() {
-  const file = path.join(ROOT, '.env');
-  if (!fs.existsSync(file)) return;
-  for (const line of fs.readFileSync(file, 'utf8').split('\n')) {
-    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*)\s*$/);
-    if (m && !(m[1] in process.env)) process.env[m[1]] = m[2];
-  }
-}
+const usesOAuth = (config) => config.imap.auth === 'oauth';
 
 function loadState() {
   try { return JSON.parse(fs.readFileSync(STATE_FILE, 'utf8')); } catch { return {}; }
@@ -32,7 +23,9 @@ async function checkMailbox(config, state) {
     host: config.imap.host,
     port: config.imap.port || 993,
     secure: config.imap.secure !== false,
-    auth: { user: config.imap.user, pass: process.env.IMAP_PASSWORD },
+    auth: usesOAuth(config)
+      ? { user: config.imap.user, accessToken: await getAccessToken(config.imap.oauth, TOKEN_FILE) }
+      : { user: config.imap.user, pass: process.env.IMAP_PASSWORD },
     logger: false,
   });
   await client.connect();
@@ -75,14 +68,8 @@ async function checkMailbox(config, state) {
 }
 
 async function main() {
-  loadEnv();
-  const configFile = path.join(ROOT, 'config.json');
-  if (!fs.existsSync(configFile)) {
-    console.error('config.json ontbreekt: kopieer config.example.json naar config.json en vul het in.');
-    process.exit(1);
-  }
-  const config = JSON.parse(fs.readFileSync(configFile, 'utf8'));
-  if (!process.env.IMAP_PASSWORD) {
+  const config = loadConfig();
+  if (!usesOAuth(config) && !process.env.IMAP_PASSWORD) {
     console.error('IMAP_PASSWORD ontbreekt: zet het in .env.');
     process.exit(1);
   }

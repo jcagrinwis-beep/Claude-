@@ -5,6 +5,7 @@
   "description": "Leest een mailbox via IMAP en stuurt een WhatsApp-bericht bij belangrijke mail",
   "type": "commonjs",
   "scripts": {
+    "login": "node src/login.js",
     "start": "node src/index.js",
     "once": "node src/index.js --once",
     "test": "node --test"
