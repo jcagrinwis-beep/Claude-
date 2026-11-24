@@ -1,0 +1,24 @@
+{
+  "pollMinutes": 5,
+  "imap": {
+    "host": "imap.gmail.com",
+    "port": 993,
+    "secure": true,
+    "user": "jij@voorbeeld.nl",
+    "mailbox": "INBOX"
+  },
+  "rules": {
+    "vipSenders": ["baas@werk.nl", "@belastingdienst.nl"],
+    "keywords": ["dringend", "urgent", "factuur", "aanmaning", "deadline"],
+    "ignoreSenders": ["noreply@", "nieuwsbrief@"]
+  },
+  "claude": {
+    "enabled": false,
+    "model": "claude-haiku-5-5",
+    "instructions": "Belangrijk = iets waar ik vandaag op moet reageren of dat geld of afspraken betreft. Nieuwsbrieven en reclame zijn nooit belangrijk."
+  },
+  "whatsapp": {
+    "provider": "callmebot",
+    "to": "+31612345678"
+  }
+}
