@@ -1,4 +1,13 @@
 {
+  "permissions": {
+    "allow": [
+      "mcp__tickets__list_tickets",
+      "mcp__tickets__get_ticket"
+    ],
+    "ask": [
+      "mcp__tickets__add_note"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
