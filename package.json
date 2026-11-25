@@ -7,6 +7,6 @@
   "scripts": {
     "test": "node --test",
     "queue": "node src/cli.js",
-    "test:hooks": "bash test/hooks/pii-guard.test.sh && bash test/hooks/kb-only.test.sh"
+    "test:hooks": "bash test/hooks/pii-guard.test.sh && bash test/hooks/kb-only.test.sh && bash test/hooks/time-promise-guard.test.sh && bash test/hooks/support-toolkit.test.sh && bash test/hooks/check-drafts.test.sh"
   }
 }

@@ -1,0 +1,14 @@
+{
+  "name": "support-desk-dojo",
+  "description": "Plugins uit het oefenproject Support Desk Dojo.",
+  "owner": {
+    "name": "Support Desk Dojo"
+  },
+  "plugins": [
+    {
+      "name": "support-toolkit",
+      "source": "./plugins/support-toolkit",
+      "description": "Guard- en PII-hooks plus code-reviewer en ticket-triager voor supportteams."
+    }
+  ]
+}

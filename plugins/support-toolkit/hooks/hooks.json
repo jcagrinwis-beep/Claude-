@@ -1,0 +1,19 @@
+{
+  "description": "guard.sh blokkeert recursief geforceerd verwijderen, find -delete en wijzigingen aan .env; pii-guard.sh blokkeert echte e-mailadressen.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/guard.sh" }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "\"${CLAUDE_PLUGIN_ROOT}\"/hooks/pii-guard.sh" }
+        ]
+      }
+    ]
+  }
+}

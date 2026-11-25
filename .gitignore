@@ -3,3 +3,5 @@ node_modules/
 .env.*
 !.env.example
 .claude/settings.local.json
+out/
+data/notes.json

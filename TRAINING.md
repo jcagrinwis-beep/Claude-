@@ -8,10 +8,10 @@ Vijf sessies van ongeveer een uur. Elke sessie behandelt één of twee onderdele
 
 | Onderdeel | Bestand | Wat het doet |
 |---|---|---|
-| Hook (PreToolUse) | `.claude/hooks/guard.sh` | Blokkeert `rm -rf` en wijzigingen aan `.env` |
+| Hook (PreToolUse) | `plugins/support-toolkit/hooks/guard.sh` | Blokkeert `rm -rf` en wijzigingen aan `.env` |
 | Hook (PostToolUse) | `.claude/hooks/check-js.sh` | Syntaxcheck en tests na elke wijziging aan een `.js`-bestand |
-| Subagent | `.claude/agents/code-reviewer.md` | Read-only reviewer die alleen concrete bugs meldt |
-| Subagent | `.claude/agents/ticket-triager.md` | Beoordeelt tickets en schrijft een conceptantwoord |
+| Subagent | `plugins/support-toolkit/agents/code-reviewer.md` | Read-only reviewer die alleen concrete bugs meldt |
+| Subagent | `plugins/support-toolkit/agents/ticket-triager.md` | Beoordeelt tickets en schrijft een conceptantwoord |
 | Rule | `.claude/rules/broncode.md` | Laadt alleen bij werk in `src/` en `test/` |
 | Rule | `.claude/rules/klantdata.md` | Laadt alleen bij werk in `data/` |
 
@@ -146,6 +146,76 @@ Je bent er als je deze vragen zonder opzoeken kunt beantwoorden:
 - Wat verandert een output style precies, en wat niet?
 - Welke onderdelen kan een plugin bevatten?
 
-## Hierna: richting "Dark"
+## Vervolg: richting "Dark"
 
-Voor een support-team zijn dit de logische vervolgstappen: non-interactive mode (`claude -p`) om tickets in bulk te verwerken, een eigen MCP-server op het ticketsysteem, en Claude in GitHub Actions voor automatische reviews.
+Op "Deep"-niveau stuur je Claude zelf aan in een gesprek. Op "Dark"-niveau draait Claude ook zonder dat jij erbij zit: in scripts, gekoppeld aan je eigen systemen en in CI. De vangnetten uit sessie 1 tot en met 4 worden dan belangrijker, omdat niemand meer meekijkt.
+
+## Sessie 6: non-interactive mode (`claude -p`)
+
+Kernidee: `claude -p "<prompt>"` draait één opdracht zonder gesprek en schrijft het resultaat naar stdout. Zo wordt Claude een onderdeel van een script. Er is niemand om toestemming te geven, dus je bepaalt vooraf welke tools mogen.
+
+### 6.1 Eén ticket, één commando
+Draai in de terminal:
+
+```bash
+claude -p "Geef de prioriteit en een conceptantwoord voor ticket T-1004 uit data/tickets.json." --allowedTools "Read"
+```
+
+**Klaar als:** je het antwoord in de terminal krijgt zonder dat er een gesprek opent. Draai het daarna nog eens met `--output-format json` en bekijk welke velden je terugkrijgt naast het antwoord zelf (kosten, aantal beurten, sessie-ID).
+
+### 6.2 Triage in bulk
+Prompt: `Maak scripts/bulk-triage.sh die voor elk ticket in data/tickets.json claude -p aanroept met alleen leesrechten, en per ticket een JSON-regel met id, prioriteit, categorie en conceptantwoord wegschrijft naar out/triage.jsonl. Zet out/ in .gitignore.`
+
+**Klaar als:** `out/triage.jsonl` zeven regels bevat die je met `node -e` of `jq` kunt inlezen. Vergelijk de prioriteiten met `npm run queue`: waar zijn Claude en `classifyTicket` het oneens, en wie heeft gelijk?
+
+### 6.3 Het vangnet in een script
+De hook `time-promise-guard.sh` bewaakt alleen bestanden in `docs/kb/`. De conceptantwoorden uit 6.2 vallen daarbuiten.
+
+Prompt: `Laat scripts/bulk-triage.sh na afloop elk conceptantwoord controleren op tijdsbeloftes, met hetzelfde patroon als time-promise-guard.sh, en stop met exit code 1 als er één gevonden wordt.`
+
+**Klaar als:** het script faalt zodra je in een testantwoord "binnen 24 uur" zet. Denkvraag: waarom kun je in een script niet vertrouwen op CLAUDE.md alleen?
+
+## Sessie 7: een eigen MCP-server
+
+Kernidee: met MCP geef je Claude gereedschap voor je eigen systemen. Claude leest dan niet meer het bestand `data/tickets.json`, maar vraagt het "ticketsysteem" om gegevens via tools met een vaste vorm.
+
+### 7.1 Een leesserver
+Prompt: `Maak in mcp/ticket-server.js een MCP-server over stdio, met alleen ingebouwde Node-modules, met twee tools: list_tickets (id, klant, onderwerp, prioriteit, escalatie) en get_ticket (alles van één ticket). Hergebruik classifyTicket en isEscalated uit src/triage.js. Registreer hem in .mcp.json.`
+
+**Klaar als:** `/mcp` de server als verbonden toont en de prompt `Welke tickets zijn geëscaleerd?` via `list_tickets` wordt beantwoord, niet door het JSON-bestand te lezen. Waarom zonder SDK? Zo zie je het JSON-RPC-protocol zelf, en blijft de repo vrij van dependencies.
+
+### 7.2 Een schrijftool met een vangnet
+Prompt: `Voeg een tool add_note toe die een interne notitie bij een ticket opslaat in data/notes.json. Weiger notities met een e-mailadres buiten @example.com.`
+
+**Klaar als:** een notitie met een adres op een echt domein wordt geweigerd en een notitie met een adres op `@example.com` wordt opgeslagen. Denkvraag: de PII-bewaker uit sessie 1 ziet deze schrijfactie niet. Waarom niet, en waar hoort de controle dus thuis?
+
+### 7.3 Rechten per tool
+Zet in `.claude/settings.json` `list_tickets` en `get_ticket` op toegestaan, en laat `add_note` om bevestiging vragen.
+
+**Klaar als:** lezen zonder vraag gebeurt en schrijven om je akkoord vraagt. Kijk in `/permissions` hoe de MCP-tools heten (`mcp__<server>__<tool>`).
+
+## Sessie 8: Claude in GitHub Actions
+
+Kernidee: in CI reviewt Claude elke pull request automatisch, met dezelfde agents en regels als in je terminal. De repo is de enige bron van afspraken.
+
+### 8.1 Installeren
+Draai `/install-github-app` in Claude Code en volg de stappen. Daarmee komen de GitHub-app, het secret `ANTHROPIC_API_KEY` en een workflow in `.github/workflows/` in de repo.
+
+**Klaar als:** de workflow op GitHub staat en een opmerking met `@claude` in een pull request een reactie oplevert.
+
+### 8.2 Automatische review met je eigen reviewer
+Prompt: `Pas de workflow aan zodat Claude bij elke pull request op src/ of test/ automatisch reviewt met de instructies uit plugins/support-toolkit/agents/code-reviewer.md, en npm test draait voordat de review begint.`
+
+**Klaar als:** een pull request met een opzettelijke bug (bijvoorbeeld `>=` in plaats van `>` in `isEscalated`) een reviewopmerking krijgt op de juiste regel.
+
+### 8.3 Denkvraag: wat neemt CI mee?
+Welke onderdelen van deze repo werken in GitHub Actions vanzelf mee, en welke niet? Denk aan CLAUDE.md, rules, hooks in `.claude/settings.json`, de plugin (die een geregistreerde marketplace nodig heeft) en de status line.
+
+**Klaar als:** je per onderdeel kunt zeggen of het in CI actief is, en voor de plugin-hooks een manier hebt bedacht om ze daar toch aan te zetten.
+
+## Zelftest: ben je "Dark"?
+
+- Waarom geef je bij `claude -p` altijd `--allowedTools` mee?
+- Wat is het verschil tussen Claude een bestand laten lezen en Claude een MCP-tool geven?
+- Waarom ziet een PreToolUse-hook op `Write` een schrijfactie via een MCP-tool niet?
+- Welke afspraken gelden in CI vanzelf, en welke moet je expliciet meegeven?

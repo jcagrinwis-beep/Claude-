@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Test voor .claude/hooks/pii-guard.sh: voert de hook nagebootste tool-aanroepen
+# Test voor plugins/support-toolkit/hooks/pii-guard.sh: voert de hook nagebootste tool-aanroepen
 # en controleert of hij blokkeert (exit 2) of doorlaat (exit 0).
 # Draai met: bash test/hooks/pii-guard.test.sh
 cd "$(dirname "$0")/../.." || exit 1
-hook=.claude/hooks/pii-guard.sh
+hook=plugins/support-toolkit/hooks/pii-guard.sh
 fails=0
 
 # Bouwt een e-mailadres op uit delen, zodat dit testbestand zelf geen
