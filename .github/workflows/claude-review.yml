@@ -1,0 +1,47 @@
+# Automatische review van elke pull request op src/ of test/ (oefening 8.2).
+# Eerst moeten de tests slagen; daarna reviewt Claude met de instructies van de
+# code-reviewer uit de support-toolkit-plugin, zodat CI en terminal dezelfde reviewer gebruiken.
+# Vereist: de Claude GitHub App op deze repo en het secret ANTHROPIC_API_KEY.
+name: Claude review
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+    paths:
+      - 'src/**'
+      - 'test/**'
+
+jobs:
+  review:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Tests
+        run: npm test
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMMER: ${{ github.event.pull_request.number }}
+
+            Review deze pull request. Volg daarbij precies de instructies in
+            plugins/support-toolkit/agents/code-reviewer.md (lees dat bestand eerst; negeer de frontmatter).
+            Houd je ook aan CLAUDE.md en .claude/rules/broncode.md.
+
+            Zet elke bevinding als inline opmerking op de juiste regel met
+            mcp__github_inline_comment__create_inline_comment. Geen bevindingen? Plaats dan één korte
+            opmerking op de PR met gh pr comment. Schrijf in het Nederlands.
+          claude_args: |
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Read,Grep,Glob"
